@@ -25,6 +25,7 @@ services:
             - ginflux=False
             - ginflux2=False
             - gifdbname=grottdb
+            - gssl=True
             - gifip=localhost
             - gifport=8086
             - gifuser=grott
