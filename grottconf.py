@@ -69,6 +69,7 @@ class Conf :
         self.influx = False
         self.influx2 = False
         self.ifdbname = "grottdb"
+        self.ifssl = True
         self.ifip = "localhost"
         self.ifport = 8086
         self.ifuser = "grott"
@@ -162,7 +163,7 @@ class Conf :
                     raise SystemExit("Grott Influxdb initialisation error")
 
                 #self.influxclient = InfluxDBClient(url='192.168.0.211:8086',org=self.iforg, token=self.iftoken)
-                self.influxclient = InfluxDBClient(url="{}:{}".format(self.ifip, self.ifport),org=self.iforg, token=self.iftoken)
+                self.influxclient = InfluxDBClient(url="{}://{}:{}".format('https' if self.ifssl else 'http', self.ifip, self.ifport),org=self.iforg, token=self.iftoken)
                 self.ifbucket_api = self.influxclient.buckets_api()
                 self.iforganization_api = self.influxclient.organizations_api()              
                 self.ifwrite_api = self.influxclient.write_api(write_options=SYNCHRONOUS)  
@@ -248,6 +249,7 @@ class Conf :
         print("\tinflux:             \t",self.influx)
         print("\tinflux2:            \t",self.influx2)
         print("\tdatabase:           \t",self.ifdbname)
+        print("\tssl:                 \t",self.ifssl)
         print("\tip:                 \t",self.ifip)
         print("\tport:               \t",self.ifport)
         print("\tuser:               \t",self.ifuser)        
@@ -404,6 +406,7 @@ class Conf :
         if config.has_option("influx","influx"): self.influx = config.get("influx","influx")
         if config.has_option("influx","influx2"): self.influx2 = config.get("influx","influx2")
         if config.has_option("influx","dbname"): self.ifdbname = config.get("influx","dbname")
+        if config.has_option("influx","ssl"): self.ifssl = config.get("influx","ssl")
         if config.has_option("influx","ip"): self.ifip = config.get("influx","ip")
         if config.has_option("influx","port"): self.ifport = int(config.get("influx","port"))
         if config.has_option("influx","user"): self.ifuser = config.get("influx","user")
@@ -495,6 +498,7 @@ class Conf :
         if os.getenv('ginflux') != None :  self.influx = self.getenv('ginflux')
         if os.getenv('ginflux2') != None :  self.influx2 = self.getenv('ginflux2')
         if os.getenv('gifdbname') != None :  self.ifdbname = self.getenv('gifdbname')
+        if os.getenv('gifssl') != None :  self.ifssl = self.getenv('gifssl')
         if os.getenv('gifip') != None :    
             try: 
                 ipaddress.ip_address(os.getenv('gifip'))
